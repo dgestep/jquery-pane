@@ -40,6 +40,10 @@ function selectPaneUsingContainerId(containerId) {
  *   jquery-ui 1.8+ using the following plugins.
  *     jQuery UI widget factory
  *     Dialog
+ *     
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
  */
 (function($, undefined) {
 	var paneContainerClass = "hasPane";
@@ -459,7 +463,7 @@ function selectPaneUsingContainerId(containerId) {
 					plugin.options.paneAjaxLoadSettings.error(xhr, status, error);
 				}
 			};
-			ajaxParams['url'] = url,
+			ajaxParams['url'] = url;
 			ajaxParams['success'] = function(data, status, xhr) {
 				plugin._doSuccessfulLoad(holdEnablePaneGroupBox, data);
 				

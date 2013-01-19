@@ -1,0 +1,41 @@
+{
+  "name": "pane",
+  "title": "jQuery Pane",
+  "description": "A jQuery UI widget which allows you to present entry points (or windows) into your data that can be served up from a server action or from static HTML (similar to a portlet in portal technology). Backed by jQuery's AJAX libraries, each pane acts independently from other panes -- achieving a clear separation of concerns between user actions.",
+  "keywords": [
+    "pane",
+    "panel",
+    "window",
+    "mdi",
+    "portal",
+    "portlet",
+    "ajax",
+    "composit",
+    "bootstrap"
+  ],
+  "version": "1.0.0",
+  "author": {
+    "name": "Doug Estep",
+    "url": "https://github.com/dgestep/jquery-pane/blob/1.0.0/AUTHORS.txt"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/dgestep/jquery-pane/blob/1.0.0/MIT-LICENSE.txt"
+    },
+    {
+      "type": "GPL",
+      "url": "https://github.com/dgestep/jquery-pane/blob/1.0.0/GPL-LICENSE.txt"
+    }
+  ],
+  "bugs": "https://github.com/dgestep/jquery-pane/issues",
+  "homepage": "http://dougestep.com/dme/jquery-pane-widget",
+  "docs": "http://dougestep.com/dme/jquery-pane-widget",
+  "download": "https://github.com/dgestep/jquery-pane/tree/1.0.0/src",
+  "dependencies": {
+    "jquery": ">=1.7",
+    "jquery ui widget factory": ">=1.8.0",
+    "jquery-disabler.js (click homepage to download)": ">=1.0.0",
+    "jquery-mod-highlighter.js (click homepage to download): ">=1.0.0"
+  }
+}
