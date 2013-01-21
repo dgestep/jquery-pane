@@ -614,8 +614,6 @@ function selectPaneUsingContainerId(containerId) {
 		 * Performs an AJAX post to the specified URL sending the supplied parameters.
 		 * @param params the parameters to issue the post.
 		 * 	params.containerId - the ID associated to the container that contains the page data to post. (Required)
-		 *  params.url - the URL to post to (Required)
-		 *  params.data - an object representing the parameters to post to the url. (Optional)
 		 *  params.keepModifiedIfExistInDom - supply the DOM element to issue a jQuery search that indicates the need to keep
 		 *     the visual display for modified columns. This is usually necessary if the post resulted in a response displaying
 		 *     user errors.  An example value would be "div.error-message". This example would result in a jQuery selector like
@@ -641,7 +639,7 @@ function selectPaneUsingContainerId(containerId) {
 					params.ajaxSettings.beforeSend(xhr, settings);
 				}
 			};
-			ajaxParams['error'] = function(xhr, status) {
+			ajaxParams['error'] = function(xhr, status, error) {
 				$("body").css("cursor", "auto");
 				$(selector).removeClass(plugin.options.disabledClass);
 				$(selector).html(plugin.options.friendlyExceptionMessage);
