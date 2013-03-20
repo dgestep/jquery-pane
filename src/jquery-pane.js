@@ -30,7 +30,7 @@ function selectPaneUsingContainerId(containerId) {
 /*!
  * jQuery Pane
  * Author: Doug Estep - Dayton Technology Group.
- * Version 1.0.0
+ * Version 1.0.3
  * 
  * API Documention:
  *   http://dougestep.com/dme/jquery-pane-widget
@@ -841,6 +841,6 @@ function selectPaneUsingContainerId(containerId) {
 	});
 	
 	$.extend( $.dtg.pane, {
-		version: "1.0.0"
+		version: "1.0.3"
 	});
 }(jQuery));
