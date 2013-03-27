@@ -30,7 +30,7 @@ function selectPaneUsingContainerId(containerId) {
 /*!
  * jQuery Pane
  * Author: Doug Estep - Dayton Technology Group.
- * Version 1.0.3
+ * Version 1.0.4
  * 
  * API Documention:
  *   http://dougestep.com/dme/jquery-pane-widget
@@ -48,8 +48,8 @@ function selectPaneUsingContainerId(containerId) {
 (function($, undefined) {
 	var paneContainerClass = "hasPane";
 	
-	var paneHighlightColumnData = "pane-highlight-column-class-name";
-	var paneHighlightLabelData = "pane-highlight-label-class-name";
+	var paneHighlightColumnData = "data-pane-highlight-column-class-name";
+	var paneHighlightLabelData = "data-pane-highlight-label-class-name";
 	var paneReloadWarningDialogId = "pane-reload-warning-dialog";
 	
 	$.widget("dtg.pane", {
@@ -155,20 +155,20 @@ function selectPaneUsingContainerId(containerId) {
 			var bool = false;
 			if (this._isNotNullAndNotUndefined(value)) {
 				var flag = new String(value).toLowerCase();
-				bool = flag == "true";
+				bool = flag === "true";
 			}
 			return bool;
 		},
 		
 		_assertContainerHasId : function() {
 			var paneId = this.element.attr("id");
-			if (this._isNullOrUndefined(paneId) || paneId.length == 0) {
+			if (this._isNullOrUndefined(paneId) || paneId.length === 0) {
 				throw "The container which this plugin is running against must contain an ID attribute.";  
 			} 
 		},
 		
 		_assertUniqueId : function() {
-			var len = $("#" + this.element.attr("id")).length == 1;
+			var len = $("#" + this.element.attr("id")).length === 1;
 			if (len > 1) {
 				throw "The container ID must be unique within the DOM.  There are " + len 
 					+ " elements which have the \"" + this.element.attr("id") + "\" ID.";   
@@ -232,8 +232,8 @@ function selectPaneUsingContainerId(containerId) {
 			if (this._isNullOrUndefined(this.options.modificationHighlighterOptions)) { return; }
 			
 			if (turnOn) {
-				var modifiedColumnClass = this.element.data(paneHighlightColumnData);
-				var modifiedLabelClass = this.element.data(paneHighlightLabelData);
+				var modifiedColumnClass = this._getAttribute(this.element, paneHighlightColumnData);
+				var modifiedLabelClass = this._getAttribute(this.element, paneHighlightLabelData);
 				if (this._isNotNullAndNotUndefined(modifiedColumnClass)) { 
 					this.options.modificationHighlighterOptions.modifiedColumnClass = modifiedColumnClass;
 					this.options.modificationHighlighterOptions.modifiedLabelClass = modifiedLabelClass;
@@ -247,12 +247,12 @@ function selectPaneUsingContainerId(containerId) {
 				var paneId = this.element.attr("id");
 				if (this._isNotNullAndNotUndefined(modifiedColumnClass) && $.trim(modifiedColumnClass).length > 0) {
 					$("#" + paneId + " ." + modifiedColumnClass).removeClass(modifiedColumnClass);
-					this.element.data(paneHighlightColumnData, modifiedColumnClass);
+					this._setAttribute(this.element, paneHighlightColumnData, modifiedColumnClass);
 					this.options.modificationHighlighterOptions.modifiedColumnClass = "";
 				}
 				if (this._isNotNullAndNotUndefined(modifiedLabelClass) && $.trim(modifiedLabelClass).length > 0) {
 					$("#" + paneId + " ." + modifiedLabelClass).removeClass(modifiedLabelClass);
-					this.element.data(paneHighlightLabelData, modifiedLabelClass);
+					this._setAttribute(this.element, paneHighlightLabelData, modifiedLabelClass);
 					this.options.modificationHighlighterOptions.modifiedLabelClass = "";
 				}
 				
@@ -308,13 +308,13 @@ function selectPaneUsingContainerId(containerId) {
 			var headerHtml = '';
 			if (value) {
 				var align = this.options.paneHeaderTitleBarClass + '-' + $.trim(this.options.paneHeaderAlign.toLowerCase());
-				if ($("#" + this.element.attr("id") + " div." + this.options.paneHeaderTitleBarClass).length == 0) {
+				if ($("#" + this.element.attr("id") + " div." + this.options.paneHeaderTitleBarClass).length === 0) {
 					headerHtml += '<div class="' + this.options.paneHeaderTitleBarClass + ' ' + align + '">';
 					headerHtml += this.options.paneHeaderTitle;
 					headerHtml += '</div>\n';
 					
 					var container = $("#" + paneId + " ." + this.options.paneGroupBoxContentClass);
-					if (container.length == 0) {
+					if (container.length === 0) {
 						container = $($("#" + paneId)[0]);
 					}
 					container.prepend(headerHtml);
@@ -329,7 +329,7 @@ function selectPaneUsingContainerId(containerId) {
 			var paneId = this.element.attr("id");
 			if (value) {
 				var selector = "div." + this.options.paneGroupBoxContentClass + " #" + this.element.attr("id");
-				if ($(selector).length == 0) {
+				if ($(selector).length === 0) {
 					$("#" + paneId).wrap('<div class="' + this.options.paneGroupBoxContentClass + '" />');
 					$("#" + paneId).wrap('<div class="' + this.options.paneGroupBoxWrapperClass + '" />');
 				}
@@ -358,15 +358,15 @@ function selectPaneUsingContainerId(containerId) {
 			var warnDialog = this._createPaneReloadWarningDialog();
 			warnDialog.dialog("option", "title", this.options.paneLoadDialogTitle);
 			
-			if (this._isNullOrUndefined(loadOption) || loadOption == paneLoadOption.PROMPT_ALWAYS) {
+			if (this._isNullOrUndefined(loadOption) || loadOption === paneLoadOption.PROMPT_ALWAYS) {
 				warnDialog.html(this.options.paneLoadAlwaysPromptMessage);
 				warnDialog.dialog("open");
-			} else if (loadOption == paneLoadOption.NO_PROMPT) { 
+			} else if (loadOption === paneLoadOption.NO_PROMPT) { 
 				this._doLoadPane(true);
-			} else if (loadOption == paneLoadOption.PROMPT_ONLY_IF_MODIFIED) {
+			} else if (loadOption === paneLoadOption.PROMPT_ONLY_IF_MODIFIED) {
 				var containerId = this.element.attr("id");
 				var columns = this.getModifiedColumnsWithinContainer(containerId);
-				if (columns.length == 0) {
+				if (columns.length === 0) {
 					this._doLoadPane(true);
 				} else {
 					warnDialog.html(this.options.paneLoadPromptWhenModifiedMessage);
@@ -398,7 +398,7 @@ function selectPaneUsingContainerId(containerId) {
 		
 		_processPaneProgress : function(startingProgress) {
 			var paneId = this.element.attr("id");
-			if (this.element.length == 0 || $.trim(this.element.html()).length == 0) {
+			if (this.element.length === 0 || $.trim(this.element.html()).length === 0) {
 				if (startingProgress) {
 					$("#" + paneId).addClass(this.options.paneProgressIndicatorClass);
 					$("body").css("cursor", "progress");
@@ -422,7 +422,7 @@ function selectPaneUsingContainerId(containerId) {
 			var paneId = this.element.attr("id");
 			var holdEnablePaneGroupBox = this.options.enablePaneGroupBox; 
 			var optionsUrl = this.options.paneActionUrl;
-			if (this._isNullOrUndefined(optionsUrl) || $.trim(optionsUrl).length == 0) {
+			if (this._isNullOrUndefined(optionsUrl) || $.trim(optionsUrl).length === 0) {
 				this._doBeforeLoad();
 				var data = "You must supply a URL as an option to this PANE before the content is loaded";
 				this._doSuccessfulLoad(holdEnablePaneGroupBox, data);
@@ -430,7 +430,7 @@ function selectPaneUsingContainerId(containerId) {
 			}
 			
 			// if the URL points to a DOM element, load the contents of the element into this PANE.
-			if (optionsUrl.indexOf("#") == 0) {
+			if (optionsUrl.indexOf("#") === 0) {
 				this._doBeforeLoad();
 				var data = $(optionsUrl).html();
 				this._doSuccessfulLoad(holdEnablePaneGroupBox, data);
@@ -472,7 +472,7 @@ function selectPaneUsingContainerId(containerId) {
 				}
 			};
 			for (var propertyName in plugin.options.paneAjaxLoadSettings) {
-				if (propertyName != 'beforeSend' && propertyName != 'error' && propertyName != 'success') {
+				if (propertyName !== 'beforeSend' && propertyName !== 'error' && propertyName !== 'success') {
 					ajaxParams[propertyName] = params.ajaxSettings[propertyName];
 				}
 			}
@@ -667,7 +667,7 @@ function selectPaneUsingContainerId(containerId) {
 			};
 			
 			for (var propertyName in params.ajaxSettings) {
-				if (propertyName != 'beforeSend' && propertyName != 'error' && propertyName != 'success') {
+				if (propertyName !== 'beforeSend' && propertyName !== 'error' && propertyName !== 'success') {
 					ajaxParams[propertyName] = params.ajaxSettings[propertyName];
 				}
 			}
@@ -687,11 +687,11 @@ function selectPaneUsingContainerId(containerId) {
 				this._throwMissingParamsException();
 			}
 			
-			if (this._isNullOrUndefined(params.containerId) || $.trim(params.containerId).length == 0) {
+			if (this._isNullOrUndefined(params.containerId) || $.trim(params.containerId).length === 0) {
 				throw "The params.containerId is required in order to issue a call."; 
 			}
 			
-			if (this._isNullOrUndefined(params.ajaxSettings.url) || $.trim(params.ajaxSettings.url).length == 0) {
+			if (this._isNullOrUndefined(params.ajaxSettings.url) || $.trim(params.ajaxSettings.url).length === 0) {
 				throw "The params.ajaxSettings.url is required in order to issue a call."; 
 			}
 		},
@@ -724,14 +724,14 @@ function selectPaneUsingContainerId(containerId) {
 		
 		_formatSelectorForContainerId : function(containerId) {
 			var paneId = this.element.attr("id");
-			if (paneId == containerId) {
+			if (paneId === containerId) {
 				containerId = null;
 			}
 			var selector = '#' + this._escapeValue(containerId) + ' ';
 			if (this._isNullOrUndefined(containerId)) {
 				selector = '';
 			}
-			if (selector == '') {
+			if (selector === '') {
 				selector = '#' + this._escapeValue(paneId);
 			} else {
 				selector = '#' + this._escapeValue(paneId) + ' ' + selector;
@@ -744,13 +744,13 @@ function selectPaneUsingContainerId(containerId) {
 		// then continue to keep the columns that were modified prior to the post in modified state
 		//
 		_evaluateModifiedStateAfterPost : function(containerId, keepModifiedIfExistInDom, modifiedColumns) {
-			if (this._isNullOrUndefined(keepModifiedIfExistInDom) || $.trim(keepModifiedIfExistInDom).length == 0) { return; }
+			if (this._isNullOrUndefined(keepModifiedIfExistInDom) || $.trim(keepModifiedIfExistInDom).length === 0) { return; }
 			
 			var modifiedFlagContainer = $("#" + containerId + " " + keepModifiedIfExistInDom);
-			if (modifiedFlagContainer.length == 0) { return; }
+			if (modifiedFlagContainer.length === 0) { return; }
 			
 			var text = $.trim(modifiedFlagContainer.text());
-			if (text.length == 0) { return; }
+			if (text.length === 0) { return; }
 			
 			var tracker = this._createColumnTracker();
 			tracker.modificationHighlighter("setOriginalValues", containerId, modifiedColumns);
@@ -766,11 +766,11 @@ function selectPaneUsingContainerId(containerId) {
 		},
 		
 		_isNullOrUndefined : function(obj) {
-			return obj == null || obj == undefined;
+			return obj === null || obj === undefined;
 		},
 		
 		_isNotNullAndNotUndefined : function(obj) {
-			return obj != undefined && obj != null;
+			return obj !== undefined && obj !== null;
 		},
 		
 		_escapeValue : function(str) {
@@ -826,10 +826,10 @@ function selectPaneUsingContainerId(containerId) {
 			$("." + paneContainerClass).each(function(index) {
 				var paneContainer = $(this);
 				var columns = paneContainer.pane("getModifiedColumnsWithinContainer");
-				if (columns.length == 0) { return true; }
+				if (columns.length === 0) { return true; }
 				
 				var title = paneContainer.pane("option", "paneHeaderTitle");
-				if (plugin._isNullOrUndefined(title) || $.trim(title).length == 0) {
+				if (plugin._isNullOrUndefined(title) || $.trim(title).length === 0) {
 					title = "[no title]";
 				}
 				
@@ -837,10 +837,31 @@ function selectPaneUsingContainerId(containerId) {
 				allColumns.push(column);
 			});
 			return allColumns;
+		},
+		
+		_hasAttribute : function(inp, attrName) {
+			var attr = inp.attr(attrName);
+			return typeof attr !==  'undefined' && attr !==  false;
+		},
+		
+		_hasNoAttribute : function(inp, attrName) {
+			return !this._hasAttribute(inp, attrName);
+		},
+		
+		_setAttribute : function(inp, attrName, attrValue) {
+			inp.attr(attrName, attrValue);
+		},
+		
+		_removeAttribute : function(inp, attrName) {
+			inp.removeAttr(attrName);
+		},
+		
+		_getAttribute : function(inp, attrName) {
+			return inp.attr(attrName);
 		}
 	});
 	
 	$.extend( $.dtg.pane, {
-		version: "1.0.3"
+		version: "1.0.4"
 	});
 }(jQuery));

@@ -11,9 +11,12 @@
     "portlet",
     "ajax",
     "composite",
-    "bootstrap"
+    "bootstrap",
+    "ui",
+    "input",
+    "form"
   ],
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": {
     "name": "Doug Estep",
     "email": "douglas.estep@gmail.com",
@@ -22,18 +25,18 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/dgestep/jquery-pane/blob/1.0.3/MIT-LICENSE.txt"
+      "url": "https://github.com/dgestep/jquery-pane/blob/1.0.4/MIT-LICENSE.txt"
     },
     {
       "type": "GPL",
-      "url": "https://github.com/dgestep/jquery-pane/blob/1.0.3/GPL-LICENSE.txt"
+      "url": "https://github.com/dgestep/jquery-pane/blob/1.0.4/GPL-LICENSE.txt"
     }
   ],
   "bugs": "https://github.com/dgestep/jquery-pane/issues",
   "homepage": "http://dougestep.com/dme/jquery-pane-widget",
   "demo": "http://dougestep.com/pane/jquery-pane-demo",
   "docs": "http://dougestep.com/dme/jquery-pane-widget",
-  "download": "https://github.com/dgestep/jquery-pane/tree/1.0.3/src",
+  "download": "https://github.com/dgestep/jquery-pane/tree/1.0.4/src",
   "dependencies": {
     "jquery": ">=1.7",
     "jquery ui widget factory": ">=1.8.0",
