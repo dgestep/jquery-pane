@@ -30,7 +30,7 @@ function selectPaneUsingContainerId(containerId) {
 /*!
  * jQuery Pane
  * Author: Doug Estep - Dayton Technology Group.
- * Version 1.0.5
+ * Version 1.1.0
  * 
  * API Documention:
  *   http://dougestep.com/dme/jquery-pane-widget
@@ -91,7 +91,7 @@ function selectPaneUsingContainerId(containerId) {
 			disablerOptions : {
 				disable : false,
 				readonly : false,
-				expression : "*:not(.disabler-ignore-readonly):not(label)"
+				expression : "*:not(.disabler-ignore-readonly):not(label)" 
 			},
 			// modificationHighlighter plugin options
 			modificationHighlighterOptions : {
@@ -277,6 +277,7 @@ function selectPaneUsingContainerId(containerId) {
 			var selector = this._formatSelectorForContainerId(containerId);
 			if (this._hasDisabler(containerId)) {
 				$(selector).disabler("option", "disable", disabled);
+				this._setDisablerOptions(selector);
 			} else {
 				this._createDisabler(containerId, false, disabled);
 			}
@@ -296,11 +297,17 @@ function selectPaneUsingContainerId(containerId) {
 			var selector = this._formatSelectorForContainerId(containerId);
 			if (this._hasDisabler(containerId)) {
 				$(selector).disabler("option", "readonly", readOnlyFlag);
+				this._setDisablerOptions(selector);
 			} else {
 				this._createDisabler(containerId, readOnlyFlag, false);
 			}
 			
 			this.options.readonly = $(selector).disabler("option", "readonly");
+		},
+		
+		_setDisablerOptions : function(selector) {
+			$(selector).disabler("option", "disabledClass", this.options.disablerOptions.disabledClass);
+			$(selector).disabler("option", "expression", this.options.disablerOptions.expression);
 		},
 				
 		_enablePaneHeader : function(value) {
@@ -543,6 +550,13 @@ function selectPaneUsingContainerId(containerId) {
 			return container.modificationHighlighter(this.options.modificationHighlighterOptions);
 		},
 		
+		_getIdOrContainerId : function(containerId) {
+			if (this._isNullOrUndefined(containerId)) {
+				containerId = this.element.attr("id");
+			}
+			return containerId;
+		},
+		
 		/**
 		 * Returns an array of column objects. Each entry in the array represents a column within the 
 		 * supplied container where the current value is different than the original value 
@@ -552,7 +566,7 @@ function selectPaneUsingContainerId(containerId) {
 		 */
 		getModifiedColumnsWithinContainer : function(containerId) {
 			var tracker = this._createColumnTracker();
-			return tracker.modificationHighlighter("getModifiedColumns", containerId);
+			return tracker.modificationHighlighter("getModifiedColumns", this._getIdOrContainerId(containerId));
 		},
 		
 		/**
@@ -563,7 +577,7 @@ function selectPaneUsingContainerId(containerId) {
 		 */
 		getAllColumnsWithSuppliedClass : function(containerId, className) {
 			var tracker = this._createColumnTracker();
-			return tracker.modificationHighlighter("getAllColumnsWithSuppliedClass", containerId, className);
+			return tracker.modificationHighlighter("getAllColumnsWithSuppliedClass", this._getIdOrContainerId(containerId), className);
 		},
 		
 		/**
@@ -576,7 +590,7 @@ function selectPaneUsingContainerId(containerId) {
 		 */
 		getStoredInputValue : function(containerId, searchColumnId) {
 			var tracker = this._createColumnTracker();
-			return tracker.modificationHighlighter("getStoredInputValue", containerId, searchColumnId);
+			return tracker.modificationHighlighter("getStoredInputValue", this._getIdOrContainerId(containerId), searchColumnId);
 		},
 		
 		/**
@@ -586,7 +600,7 @@ function selectPaneUsingContainerId(containerId) {
 		 */
 		getStoredInputColumns : function(containerId) {
 			var tracker = this._createColumnTracker();
-			return tracker.modificationHighlighter("getStoredInputColumns", containerId);
+			return tracker.modificationHighlighter("getStoredInputColumns", this._getIdOrContainerId(containerId));
 		},
 		
 		/**
@@ -596,7 +610,7 @@ function selectPaneUsingContainerId(containerId) {
 		 */
 		storeOriginalValues : function(containerId) {
 			var tracker = this._createColumnTracker();
-			tracker.modificationHighlighter("storeOriginalValues", containerId);
+			tracker.modificationHighlighter("storeOriginalValues", this._getIdOrContainerId(containerId));
 		},
 		
 		/**
@@ -607,7 +621,7 @@ function selectPaneUsingContainerId(containerId) {
 		 */
 		resetModifiedColumnsInContainer : function(containerId) {
 			var tracker = this._createColumnTracker();
-			tracker.modificationHighlighter("reset", containerId);
+			tracker.modificationHighlighter("reset", this._getIdOrContainerId(containerId));
 		},
 		
 		/**
@@ -862,6 +876,6 @@ function selectPaneUsingContainerId(containerId) {
 	});
 	
 	$.extend( $.dtg.pane, {
-		version: "1.0.5"
+		version: "1.1.0"
 	});
 }(jQuery));
